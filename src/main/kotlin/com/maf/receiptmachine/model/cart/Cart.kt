@@ -1,5 +1,6 @@
 package com.maf.receiptmachine.model.cart
 
+import com.maf.receiptmachine.util.formatDouble
 import java.util.*
 
 class Cart {
@@ -7,27 +8,53 @@ class Cart {
     var totalTax: Double = 0.0
     var totalAmount: Double = 0.0
 
-    fun addItem(item: CartItem, taxOnItem: Double) {
-        val oldItem = this.cartItemMap[item.productId]
+    fun addItem(itemToAdd: CartItem, taxOnItem: Double) {
+        val oldItem = this.findIfProductAlreadyExist(itemToAdd.productId)
         if (oldItem != null) {
-            this.cartItemMap[item.productId] = oldItem.copy(
-                quantity = oldItem.quantity + item.quantity,
-                finalPrice = oldItem.finalPrice + item.finalPrice
-            )
+            this.processExistingCartItem(oldItem, itemToAdd, taxOnItem)
+
         } else {
-            this.cartItemMap[item.productId] = item
+            this.processNewItem(itemToAdd, taxOnItem)
+            setTotalAmount(itemToAdd, taxOnItem)
         }
         this.totalTax += taxOnItem
-        this.totalAmount += item.finalPrice
+
+    }
+
+    private fun setTotalAmount(itemToAdd: CartItem, taxOnItem: Double) {
+        this.totalAmount += (itemToAdd.finalPrice + taxOnItem)
+    }
+
+
+    fun findIfProductAlreadyExist(cartItemProductId: Long): CartItem? {
+        return this.cartItemMap[cartItemProductId]
     }
 
     fun checkout() {
+        println("\n\n********************* Items in the cart *******************\n")
         this.cartItemMap.forEach { _, cartItem ->
-            println("${cartItem.quantity} ${cartItem.name} ${cartItem.finalPrice}")
+            println("${cartItem.quantity} ${cartItem.name} ${formatDouble(cartItem.finalPrice)}")
         }
-        println("Sales Taxes: $totalTax")
-        println("Total: $totalAmount")
+        println("\n------------------- Cost details ----------------------\n")
+        println("Sales Taxes: ${formatDouble(totalTax)}")
+        println("Total: ${formatDouble(totalAmount)} \n")
+        println("-------------------------- End ---------------------------\n")
+        cleanTheCart()
 
+    }
+
+    fun processExistingCartItem(oldItem: CartItem, newItem: CartItem, taxOnItem: Double) {
+        val updatedItem = oldItem.copy(
+            quantity = (oldItem.quantity + newItem.quantity),
+            finalPrice = (oldItem.finalPrice + (newItem.finalPrice + taxOnItem))
+        )
+        setTotalAmount(newItem, taxOnItem)
+        this.cartItemMap[newItem.productId] = updatedItem
+    }
+
+    fun processNewItem(itemToAdd: CartItem, taxOnItem: Double) {
+        this.cartItemMap[itemToAdd.productId] =
+            itemToAdd.copy(finalPrice = itemToAdd.finalPrice + taxOnItem)
     }
 
     fun cleanTheCart() {

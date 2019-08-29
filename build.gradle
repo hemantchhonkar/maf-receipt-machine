@@ -25,6 +25,16 @@ compileTestKotlin {
 }
 
 task runApp(type: JavaExec) {
+    standardInput = System.in
     main = 'com.maf.receiptmachine.MainApplication'
     classpath = sourceSets.main.runtimeClasspath
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.maf.receiptmachine.MainApplication'
+    }
+
+    // NEW LINE HERE !!!
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }

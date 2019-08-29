@@ -5,7 +5,7 @@ object Store {
     var categoryTaxMap: Map<Category, Double> = mapOf()
 
     init {
-        print("Store is being initialized")
+        println("Store is being initialized")
         this.productList = initializeProductList()
         this.categoryTaxMap = initializeCategoryTaxMap()
     }
@@ -20,14 +20,16 @@ fun initializeCategoryTaxMap(): Map<Category, Double> {
 }
 
 fun initializeProductList(): List<Product> {
-    val productList: ArrayList<Product> = arrayListOf<Product>()
-    productList.add(Product(1, "Book", "", Category.BOOK, 12.49))
-    productList.add(Product(2, "Music CD", "", Category.OTHER, 14.99))
-    productList.add(Product(3, "Chocolate Bar", "", Category.FOOD, 0.85))
-    productList.add(Product(4, "Imported box of chocolates", "", Category.IMPORTED, 10.00))
-    productList.add(Product(5, "Imported bottle of perfume", "", Category.IMPORTED, 47.50))
-    productList.add(Product(6, "Imported bottle of perfume", "", Category.IMPORTED, 27.99))
-    productList.add(Product(7, "Bottle of perfume", "", Category.OTHER, 18.99))
-    productList.add(Product(8, "Packet of headache pills", "", Category.MEDICINE, 9.75))
+    val productList: ArrayList<Product> = arrayListOf()
+    productList.add(Product(1, "Book", "", Category.BOOK, 12.49, false))
+    productList.add(Product(2, "Music CD", "", Category.OTHER, 14.99, false))
+    productList.add(Product(3, "Chocolate Bar", "", Category.FOOD, 0.85, false))
+    productList.add(Product(4, "Imported box of chocolates", "", Category.FOOD, 10.00, true))
+    productList.add(Product(5, "Imported bottle of perfume 1", "", Category.OTHER, 47.50, true))
+    productList.add(Product(6, "Imported bottle of perfume 2", "", Category.OTHER, 27.99, true))
+    productList.add(Product(7, "Bottle of perfume", "", Category.OTHER, 18.99, false))
+    productList.add(Product(8, "Packet of headache pills", "", Category.MEDICINE, 9.75, false))
+    productList.add(Product(9, "Box of imported chocolates ", "", Category.FOOD, 11.25, true))
     return productList
 }
+
