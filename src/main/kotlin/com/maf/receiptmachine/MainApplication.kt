@@ -22,7 +22,7 @@ fun main() {
         print("Enter number of products: ")
         val units = scanner.nextInt()
         processInput(productId, units)
-        print("Wanna add more items, if yes then enter Y otherwise enter N to checkout")
+        print("Wanna add more items, if yes then enter Y otherwise enter N to checkout    -    ")
         val command = readLine()
         if (command != null && "N" == command.toUpperCase()) {
             proceedToCheckout()
@@ -49,6 +49,6 @@ fun printProductsFromStore() {
     println("*********************************************")
     println(
         "Please enter Product ID from above list to add items into the cart." +
-                " Enter DONE when you want to checkout."
+                " And follow the instructions."
     )
 }
